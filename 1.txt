@@ -1,0 +1,102 @@
+import numpy as np
+import matplotlib. pyplot as plt
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def relu(x):
+    return np.maximum(0, x)
+
+def tanh(x):
+    return np.tanh(x)
+
+def softmax(x) :
+    exp_values = np.exp(x - np.max(x, axis=0, keepdims=True))
+    return exp_values / np.sum(exp_values, axis=0, keepdims=True)
+
+# Generate input values
+x = np.linspace(-5, 5, 100)
+
+# Compute activation values
+sigmoid_values = sigmoid(x)
+relu_values = relu(x)
+tanh_values = tanh(x)
+softmax_values= softmax(np.vstack([x,x+2]))
+
+# Plot the activation functions
+plt.figure(figsize=(12, 8))
+
+plt. subplot(2, 2, 1)
+plt.plot(x, sigmoid_values, label='Sigmoid')
+plt.title('Sigmoid Activation Function')
+plt.legend()
+
+plt.subplot(2, 2, 2)
+plt.plot(x, relu_values, label = 'ReLU')
+plt.title( 'ReLU Activation Function')
+plt.legend()
+
+plt.subplot(2, 2, 3)
+plt.plot(x, tanh_values, label= 'Tanh')
+plt.title('Tanh Activation Function')
+plt. legend()
+                
+plt.subplot(2,2,4)
+plt.plot(x, softmax_values[0], label='Softmax (x)')
+plt.plot(x, softmax_values[1], label='Softmax (x + 2)')
+plt.title( 'Softmax Activation Function')
+plt.legend()
+    
+plt.tight_layout()
+plt.show()
+import numpy as np
+import matplotlib. pyplot as plt
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def relu(x):
+    return np.maximum(0, x)
+
+def tanh(x):
+    return np.tanh(x)
+
+def softmax(x) :
+    exp_values = np.exp(x - np.max(x, axis=0, keepdims=True))
+    return exp_values / np.sum(exp_values, axis=0, keepdims=True)
+
+# Generate input values
+x = np.linspace(-5, 5, 100)
+
+# Compute activation values
+sigmoid_values = sigmoid(x)
+relu_values = relu(x)
+tanh_values = tanh(x)
+softmax_values= softmax(np.vstack([x,x+2]))
+
+# Plot the activation functions
+plt.figure(figsize=(12, 8))
+
+plt. subplot(2, 2, 1)
+plt.plot(x, sigmoid_values, label='Sigmoid')
+plt.title('Sigmoid Activation Function')
+plt.legend()
+
+plt.subplot(2, 2, 2)
+plt.plot(x, relu_values, label = 'ReLU')
+plt.title( 'ReLU Activation Function')
+plt.legend()
+
+plt.subplot(2, 2, 3)
+plt.plot(x, tanh_values, label= 'Tanh')
+plt.title('Tanh Activation Function')
+plt. legend()
+                
+plt.subplot(2,2,4)
+plt.plot(x, softmax_values[0], label='Softmax (x)')
+plt.plot(x, softmax_values[1], label='Softmax (x + 2)')
+plt.title( 'Softmax Activation Function')
+plt.legend()
+    
+plt.tight_layout()
+plt.show()

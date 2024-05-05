@@ -1,0 +1,49 @@
+import numpy as np
+from minisom import MiniSom
+import matplotlib.pyplot as plt
+
+# Function to encode input data
+def encode_input(data):
+    return 2 * data - 1
+
+# Function to decode output data
+def decode_output(data):
+    return (data + 1) / 2
+
+# Input data for demonstration
+data = np.array([[1], [0], [1], [0], [1], [1]])
+
+# Encode the input data
+encoded_data = encode_input(data)
+
+# Function to create and train a SOM
+def train_som(data, som_size, epochs):
+    som = MiniSom(som_size[0], som_size[1], data.shape[1], sigma=0.5, learning_rate=0.5)
+    som.train_random(data, epochs)
+    return som
+
+# Train SOM
+som_size = (2, 2)
+trained_som = train_som(encoded_data, som_size, epochs=1000)
+
+# Test the trained SOM
+test_data = np.array([[1, 0, 1, 0, 1, 1]])
+encoded_test_data = encode_input(test_data)
+winner_neuron = trained_som.winner(encoded_test_data)
+
+# Display the results
+print(f"Input Data: {test_data}")
+print(f"Winner Neuron Coordinates: {winner_neuron}")
+
+# Updated Plotting Function
+def plot_som_weights(som):
+    plt.figure(figsize=(8, 6))
+    plt.pcolor(som.get_weights()[:, :, 0], cmap='bone_r')
+    plt.colorbar()
+    for i, node in enumerate(som.get_weights()):
+        plt.text(node[0] + 0.5, node[1] + 0.5, str(i), color='red', fontsize=12, ha='center', va='center')
+    plt.title('SOM Weights')
+    plt.show()
+
+# Call the plotting function to display the SOM weights
+plot_som_weights(trained_som)

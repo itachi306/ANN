@@ -1,0 +1,62 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+def initialize_weights(input_size, hidden_size, output_size):
+    np.random.seed(42)
+    weights_input_hidden = np.random.randn(input_size, hidden_size)
+    weights_hidden_output = np.random.randn(hidden_size, output_size)
+    return weights_input_hidden, weights_hidden_output
+
+def feedforward(inputs, weights_input_hidden, weights_hidden_output):
+    hidden_layer_input = np.dot(inputs, weights_input_hidden)
+    hidden_layer_output = sigmoid(hidden_layer_input)
+    output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)
+    predicted_output = sigmoid(output_layer_input)
+    return hidden_layer_output, predicted_output
+
+def backpropagation(inputs, targets, hidden_layer_output, predicted_output, weights_input_hidden, weights_hidden_output, learning_rate):
+    output_error = targets - predicted_output
+    output_delta = output_error * sigmoid_derivative(predicted_output)
+    hidden_layer_error = output_delta.dot(weights_hidden_output.T)
+    hidden_layer_delta = hidden_layer_error * sigmoid_derivative(hidden_layer_output)
+    
+    weights_hidden_output += hidden_layer_output.T.dot(output_delta) * learning_rate
+    weights_input_hidden += inputs.T.dot(hidden_layer_delta) * learning_rate
+
+def train_neural_network(inputs, targets, input_size, hidden_size, output_size, epochs, learning_rate):
+    weights_input_hidden, weights_hidden_output = initialize_weights(input_size, hidden_size, output_size)
+    loss_history = []
+
+    for epoch in range(epochs):
+        hidden_layer_output, predicted_output = feedforward(inputs, weights_input_hidden, weights_hidden_output)
+        backpropagation(inputs, targets, hidden_layer_output, predicted_output, weights_input_hidden, weights_hidden_output, learning_rate)
+        
+        if epoch % 100 == 0:
+            loss = np.mean(np.abs(targets - predicted_output))
+            loss_history.append(loss)
+            print(f"Epoch {epoch}, Loss: {loss}")
+    
+    print("Training complete.")
+    
+    # Plot the Loss history
+    plt.plot(range(0, epochs, 100), loss_history, marker='o')
+    plt.title('Training Loss Over Epochs')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.show()
+    
+    return weights_hidden_output
+
+# Example usage:
+# Define XOR data
+inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+targets = np.array([[0], [1], [1], [0]])
+
+# Train the neural network
+trained_weights = train_neural_network(inputs, targets, input_size=2, hidden_size=2, output_size=1, epochs=10000, learning_rate=0.1)
